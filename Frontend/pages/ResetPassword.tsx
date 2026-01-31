@@ -34,11 +34,15 @@ const ResetPassword: React.FC = () => {
     e.preventDefault();
     setRequestStatus('loading');
     setRequestMessage('');
+    setResetStatus('idle');
+    setResetMessage('');
 
     try {
       await api.post('/auth/forgot', { email });
       setRequestStatus('success');
       setRequestMessage('If the email exists, you will receive a reset link shortly.');
+      setToken('');
+      setStep('request');
     } catch (err) {
       setRequestStatus('error');
       setRequestMessage('Failed to request reset. Please try again.');
@@ -123,19 +127,7 @@ const ResetPassword: React.FC = () => {
 
         {step === 'reset' && (
           <form className="mt-6 space-y-4" onSubmit={handleResetPassword}>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 ml-1">
-                Reset Token
-              </label>
-              <input
-                type="text"
-                required
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="block w-full px-3 py-3 border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-sm font-medium"
-                placeholder="Paste reset token"
-              />
-            </div>
+            <input type="hidden" value={token} readOnly />
 
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 ml-1">
