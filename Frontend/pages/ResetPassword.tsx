@@ -36,14 +36,9 @@ const ResetPassword: React.FC = () => {
     setRequestMessage('');
 
     try {
-      const response = await api.post('/auth/forgot', { email });
+      await api.post('/auth/forgot', { email });
       setRequestStatus('success');
-      setRequestMessage('If the email exists, a reset token was sent.');
-      const returnedToken = response.data?.resetToken;
-      if (returnedToken) {
-        setToken(returnedToken);
-      }
-      setStep('reset');
+      setRequestMessage('If the email exists, you will receive a reset link shortly.');
     } catch (err) {
       setRequestStatus('error');
       setRequestMessage('Failed to request reset. Please try again.');
@@ -84,7 +79,9 @@ const ResetPassword: React.FC = () => {
       <div className="max-w-xl w-full bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-6">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">Reset Password</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          {step === 'request' ? 'Enter your email to receive a reset token.' : 'Enter the token sent to your email and set a new password.'}
+          {step === 'request'
+            ? 'Enter your email to receive a reset link.'
+            : 'Set a new password for your account.'}
         </p>
 
         {step === 'request' && (
